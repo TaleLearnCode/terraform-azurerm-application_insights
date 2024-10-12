@@ -17,12 +17,12 @@ module "log_analytics_workspace" {
   srv_comp_abbr       = var.srv_comp_abbr
   location            = var.location
   environment         = var.environment
-  resource_group_name = module.resource_group.resource_name
+  resource_group_name = var.resource_group_name
   identity_type       = "SystemAssigned"
 }
 
 locals {
-  workspace_id = var.create_workspace && length(module.log_analytics_workspace.workspace) > 0 ? amodule.log_analytics_workspace.workspace[0].id : (var.workspace_id != "" ? var.workspace_id : null)
+  workspace_id = var.create_workspace && length(module.log_analytics_workspace) > 0 ? module.log_analytics_workspace.workspace[0].id : (var.workspace_id != "" ? var.workspace_id : null)
 }
 
 # -----------------------------------------------------------------------------
@@ -48,13 +48,8 @@ resource "azurerm_application_insights" "target" {
   resource_group_name = var.resource_group_name
   application_type    = var.application_type
 
-  dynamic "workspace_id" {
-    for_each = local.workspace_id != null ? toset(local.workspace_id) : []
-    content {
-      workspace_id = local.workspace_id
-    }    
-  }
-  
+  workspace_id = var.workspace_id != null ? var.workspace_id : null
+ 
   daily_data_cap_in_gb                  = var.daily_data_capp_in_gb
   daily_data_cap_notifications_disabled = var.daily_data-cap_notifications_disabled
   retention_in_days                     = var.retention_in_days
