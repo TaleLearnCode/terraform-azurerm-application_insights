@@ -22,8 +22,9 @@ module "log_analytics_workspace" {
 }
 
 locals {
-  workspace_id = var.create_workspace && length(module.log_analytics_workspace) > 0 ? module.log_analytics_workspace.workspace[0].id : (var.workspace_id != "" ? var.workspace_id : null)
+  workspace_id = var.create_workspace && length(module.log_analytics_workspace) > 0 ? module.log_analytics_workspace[0].workspace.id : (var.workspace_id != "" ? var.workspace_id : null)
 }
+
 
 # -----------------------------------------------------------------------------
 # Application Insights
