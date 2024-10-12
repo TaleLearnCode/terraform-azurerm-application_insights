@@ -56,12 +56,6 @@ variable "workspace_id" {
   description = "The ID of the Log Analytics Workspace to which the Application Insights resource should be linked."
 }
 
-variable "create_workspace" {
-  type        = bool
-  default     = false
-  description = "Specifies whether a new Log Analytics Workspace should be created. The default is false."
-}
-
 variable "local_authentication_disabled" {
   type        = bool
   default     = false

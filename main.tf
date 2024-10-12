@@ -2,34 +2,6 @@
 # Create an Application Insights resource
 # #############################################################################
 
-# -----------------------------------------------------------------------------
-# Log Analytics Workspace
-# -----------------------------------------------------------------------------
-
-module "log_analytics_workspace" {
-  count   = var.create_workspace ? 1 : 0
-  source  = "TaleLearnCode/log_analytics_workspace/azurerm"
-  version = "0.0.1"
-  providers = {
-    azurerm = azurerm
-  }
-
-  srv_comp_abbr       = var.srv_comp_abbr
-  location            = var.location
-  environment         = var.environment
-  resource_group_name = var.resource_group_name
-  identity_type       = "SystemAssigned"
-}
-
-locals {
-  workspace_id = var.create_workspace && length(module.log_analytics_workspace) > 0 ? module.log_analytics_workspace[0].workspace.id : (var.workspace_id != "" ? var.workspace_id : null)
-}
-
-
-# -----------------------------------------------------------------------------
-# Application Insights
-# -----------------------------------------------------------------------------
-
 module "naming" {
   source  = "TaleLearnCode/naming/azurerm"
   version = "0.0.4-pre"
@@ -49,7 +21,7 @@ resource "azurerm_application_insights" "target" {
   resource_group_name = var.resource_group_name
   application_type    = var.application_type
 
-  workspace_id = local.workspace_id != null ? local.workspace_id : null
+  workspace_id = var.workspace_id != null ? var.workspace_id : null
  
   daily_data_cap_in_gb                  = var.daily_data_capp_in_gb
   daily_data_cap_notifications_disabled = var.daily_data-cap_notifications_disabled
