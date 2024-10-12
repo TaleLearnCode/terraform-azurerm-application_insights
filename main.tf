@@ -48,7 +48,7 @@ resource "azurerm_application_insights" "target" {
   resource_group_name = var.resource_group_name
   application_type    = var.application_type
 
-  workspace_id = var.workspace_id != null ? var.workspace_id : null
+  workspace_id = local.workspace_id != null ? local.workspace_id : null
  
   daily_data_cap_in_gb                  = var.daily_data_capp_in_gb
   daily_data_cap_notifications_disabled = var.daily_data-cap_notifications_disabled
